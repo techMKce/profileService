@@ -17,13 +17,19 @@ import com.project.Profile.and.Enrollment.Repository.StudentRepository;
 public class CourseEnrollmentService {
 
 	 @Autowired
-	    private CourseEnrollmentRepository repository;
+	 private CourseEnrollmentRepository repository;
 	 
 	 @Autowired
 	 private StudentRepository studentRepository;
 
+	@Autowired
+	private MailService mailService;
+
 	    public CourseEnrollment enrollStudent(String courseId, String rollNum) {
 	        Optional<CourseEnrollment> existing = repository.findById(courseId);
+
+			StudentEntity student = studentRepository.findByRollNum(rollNum)
+					.orElseThrow(() -> new ResourceNotFoundException("Student not found with roll number: " + rollNum));
 
 
 	        if (existing.isPresent()) {
@@ -33,6 +39,7 @@ public class CourseEnrollmentService {
 	            if (!rollNums.contains(rollNum)) {
 	                rollNums.add(rollNum);
 	                course.setRollNums(rollNums);
+					mailService.sendEnrollmentMail(student.getEmail(), courseId);
 	                return repository.save(course);
 	            }
 
@@ -41,6 +48,7 @@ public class CourseEnrollmentService {
 	            List<String> rolls = new ArrayList<>();
 	            rolls.add(rollNum);
 	            CourseEnrollment newCourse = new CourseEnrollment(courseId, rolls);
+				mailService.sendEnrollmentMail(student.getEmail(), courseId);
 	            return repository.save(newCourse);
 	        }
 	    }
@@ -105,29 +113,5 @@ public class CourseEnrollmentService {
 
 	        return count;
 	    }
-	    
-	    public List<String> getStudentsByCourseAndDepartment(String courseId, String department) {
-	        // Get the course enrollment
-	        CourseEnrollment course = repository.findById(courseId)
-	                .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
-
-	        // Get the roll numbers of students enrolled in this course
-	        List<String> rollNums = course.getRollNums();
-
-	        // Filter students by department
-	        List<String> departmentStudents = new ArrayList<>();
-	        for (String rollNum : rollNums) {
-	            StudentEntity student = studentRepository.findById(rollNum)
-	                    .orElseThrow(() -> new ResourceNotFoundException("Student not found with roll number: " + rollNum));
-
-	            if (student.getProgram().equalsIgnoreCase(department)) {
-	                departmentStudents.add(rollNum);
-	            }
-	        }
-
-	        return departmentStudents;
-	    }
-
-
 
 }
