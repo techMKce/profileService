@@ -2,6 +2,7 @@ package com.project.Profile.and.Enrollment.Controllers;
 
 import java.util.List;
 
+import com.project.Profile.and.Enrollment.Dto.StudentCourseInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +63,18 @@ public class CourseEnrollmentController {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
 	                .body("Student " + rollNum + " is NOT enrolled in course " + courseId);
 	    }
+	}
+
+	@GetMapping("/student-details/{courseId}")
+	public List<StudentCourseInfoDto> getStudentDetails(@PathVariable String courseId) {
+		return service.getEnrolledStudentsWithDepartment(courseId);
+	}
+
+	@GetMapping("/students-by-department/{courseId}/{dept}")
+	public List<StudentCourseInfoDto> getStudentsByCourseAndDepartment(
+			@PathVariable String courseId,
+			@PathVariable String dept) {
+		return service.getEnrolledStudentsByCourseAndDept(courseId, dept);
 	}
 	
 	

@@ -3,7 +3,6 @@ package com.project.Profile.and.Enrollment.Service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,6 +110,7 @@ public class FacultyStudentAssignmentService {
         // Each assignment represents a (facultyId, courseId) pair, so just count them
         return assignments.size();
     }
+
 
 
 }

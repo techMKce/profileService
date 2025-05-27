@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.project.Profile.and.Enrollment.Dto.StudentCourseInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -113,5 +114,37 @@ public class CourseEnrollmentService {
 
 	        return count;
 	    }
+
+	public List<StudentCourseInfoDto> getEnrolledStudentsWithDepartment(String courseId) {
+		CourseEnrollment course = repository.findById(courseId)
+				.orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
+
+		List<StudentCourseInfoDto> studentDetails = new ArrayList<>();
+		for (String roll : course.getRollNums()) {
+			StudentEntity student = studentRepository.findByRollNum(roll)
+					.orElseThrow(() -> new ResourceNotFoundException("Student not found with roll number: " + roll));
+
+			studentDetails.add(new StudentCourseInfoDto(roll, student.getProgram()));
+		}
+
+		return studentDetails;
+	}
+
+	public List<StudentCourseInfoDto> getEnrolledStudentsByCourseAndDept(String courseId, String department) {
+		CourseEnrollment course = repository.findById(courseId)
+				.orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
+
+		List<StudentCourseInfoDto> filteredStudents = new ArrayList<>();
+		for (String roll : course.getRollNums()) {
+			StudentEntity student = studentRepository.findByRollNum(roll)
+					.orElseThrow(() -> new ResourceNotFoundException("Student not found with roll number: " + roll));
+
+			if (department.equalsIgnoreCase(student.getProgram())) {
+				filteredStudents.add(new StudentCourseInfoDto(roll, student.getProgram()));
+			}
+		}
+
+		return filteredStudents;
+	}
 
 }
