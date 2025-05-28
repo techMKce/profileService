@@ -1,29 +1,17 @@
 package com.project.Profile.and.Enrollment.Dto;
 
+import lombok.Data;
+
+@Data
 public class StudentCourseInfoDto {
     private String rollNum;
+    private String name;
     private String department;
 
-    public StudentCourseInfoDto() {}
-
-    public StudentCourseInfoDto(String rollNum, String department) {
+    public StudentCourseInfoDto(String rollNum, String program, String name) {
         this.rollNum = rollNum;
-        this.department = department;
+        this.department = program;
+        this.name = name;
     }
 
-    public String getRollNum() {
-        return rollNum;
-    }
-
-    public void setRollNum(String rollNum) {
-        this.rollNum = rollNum;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
 }
