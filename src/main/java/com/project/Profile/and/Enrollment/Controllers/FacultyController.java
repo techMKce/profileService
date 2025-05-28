@@ -46,4 +46,10 @@ public class FacultyController {
 		facultyService.syncFacultyFromLoginService();
 		return "Faculty data synced successfully!";
 	}
+
+	@GetMapping("/departments")
+	public List<String> getDepartments() {
+		return facultyService.getAllDepartments();
+	}
+
 }
