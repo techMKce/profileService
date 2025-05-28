@@ -2,13 +2,20 @@ package com.project.Profile.and.Enrollment.Service;
 
 import java.util.List;
 
+import com.project.Profile.and.Enrollment.Dto.LoginFacultyDto;
+import com.project.Profile.and.Enrollment.Dto.LoginStudentDto;
+import com.project.Profile.and.Enrollment.Entity.StudentEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.project.Profile.and.Enrollment.Dto.FacultyDto;
 import com.project.Profile.and.Enrollment.Entity.FacultyEntity;
 import com.project.Profile.and.Enrollment.Exception.ResourceNotFoundException;
 import com.project.Profile.and.Enrollment.Repository.FacultyRepository;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class FacultyService {
@@ -62,6 +69,36 @@ public class FacultyService {
         return facultyList.stream()
                 .map(f -> new FacultyDto(f.getStaffId(), f.getName()))
                 .toList();
+    }
+
+    public void syncFacultyFromLoginService() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        String url = "http://localhost:8080/api/v1/auth/faculty/all";
+
+        ResponseEntity<List<LoginFacultyDto>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<LoginFacultyDto>>() {}
+        );
+        System.out.println(response);
+
+        List<LoginFacultyDto> faculty = response.getBody();
+
+        for (LoginFacultyDto student : faculty) {
+            System.out.println("Roll: " + student.getId() + ", Email: " + student.getEmail());
+        }
+
+        for (LoginFacultyDto dto : faculty) {
+            FacultyEntity student = new FacultyEntity();
+            student.setStaffId(dto.getId());
+            student.setName(dto.getName());
+            student.setEmail(dto.getEmail());
+            student.setDepartment(dto.getDept()); // Assuming department is equivalent to progra
+
+            facultyRepository.save(student);
+        }
     }
 
 }

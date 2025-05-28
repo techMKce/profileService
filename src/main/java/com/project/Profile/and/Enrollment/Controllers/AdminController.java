@@ -2,6 +2,7 @@ package com.project.Profile.and.Enrollment.Controllers;
 
 import java.util.List;
 
+import com.project.Profile.and.Enrollment.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,10 @@ public class AdminController {
 	
 	@Autowired
     private AdminService adminService;
-	
+
+    @Autowired
+    private StudentService studentService;
+
 	@Autowired
     private StudentRepository studentRepository;
     
@@ -32,6 +36,7 @@ public class AdminController {
     
     @GetMapping("/student")
     public List<StudentEntity> getAllStudent() {
+        studentService.syncStudentsFromLoginService();
         return adminService.getAllStudent();
     }
 
@@ -52,6 +57,7 @@ public class AdminController {
 
     @GetMapping("/faculty")
     public List<FacultyEntity> getAllFaculty() {
+
         return adminService.getAllFaculty();
     }
 

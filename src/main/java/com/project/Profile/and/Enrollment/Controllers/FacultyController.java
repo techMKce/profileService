@@ -40,4 +40,10 @@ public class FacultyController {
 	public List<FacultyDto> getFacultyNamesByDepartment(@PathVariable String department) {
 	    return facultyService.getFacultyNamesByDepartment(department);
 	}
+
+	@GetMapping("/external-faculty")
+	public String syncExternalStudents() {
+		facultyService.syncFacultyFromLoginService();
+		return "Faculty data synced successfully!";
+	}
 }
