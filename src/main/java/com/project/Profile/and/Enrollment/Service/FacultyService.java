@@ -101,4 +101,8 @@ public class FacultyService {
         }
     }
 
+    public List<String> getAllDepartments() {
+        return facultyRepository.findDistinctDepartments();
+    }
+
 }
