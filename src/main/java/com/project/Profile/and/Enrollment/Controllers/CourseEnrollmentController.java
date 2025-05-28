@@ -67,7 +67,7 @@ public class CourseEnrollmentController {
 
 	@GetMapping("/student-details/{courseId}")
 	public List<StudentCourseInfoDto> getStudentDetails(@PathVariable String courseId) {
-		return service.getEnrolledStudentsWithDepartment(courseId);
+		return service.getEnrolledStudentsWithDepartmentandName(courseId);
 	}
 
 	@GetMapping("/students-by-department/{courseId}/{dept}")

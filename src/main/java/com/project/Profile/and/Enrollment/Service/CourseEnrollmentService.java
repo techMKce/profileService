@@ -115,7 +115,7 @@ public class CourseEnrollmentService {
 	        return count;
 	    }
 
-	public List<StudentCourseInfoDto> getEnrolledStudentsWithDepartment(String courseId) {
+	public List<StudentCourseInfoDto> getEnrolledStudentsWithDepartmentandName(String courseId) {
 		CourseEnrollment course = repository.findById(courseId)
 				.orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
 
@@ -124,7 +124,7 @@ public class CourseEnrollmentService {
 			StudentEntity student = studentRepository.findByRollNum(roll)
 					.orElseThrow(() -> new ResourceNotFoundException("Student not found with roll number: " + roll));
 
-			studentDetails.add(new StudentCourseInfoDto(roll, student.getProgram()));
+			studentDetails.add(new StudentCourseInfoDto(roll, student.getProgram(),student.getName()));
 		}
 
 		return studentDetails;
@@ -140,11 +140,12 @@ public class CourseEnrollmentService {
 					.orElseThrow(() -> new ResourceNotFoundException("Student not found with roll number: " + roll));
 
 			if (department.equalsIgnoreCase(student.getProgram())) {
-				filteredStudents.add(new StudentCourseInfoDto(roll, student.getProgram()));
+				filteredStudents.add(new StudentCourseInfoDto(roll, student.getProgram(), student.getName()));
 			}
 		}
 
 		return filteredStudents;
 	}
+
 
 }
