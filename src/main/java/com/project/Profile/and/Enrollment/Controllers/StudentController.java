@@ -40,6 +40,12 @@ public class StudentController {
     public StudentEntity updateStudentDetails(@PathVariable String rollnum, @RequestBody StudentEntity student) {
         return studentService.updateStudent(rollnum, student);
     }
+
+    @GetMapping("/external-students")
+    public String syncExternalStudents() {
+        studentService.syncStudentsFromLoginService();
+        return "Student data synced successfully!";
+    }
 	
 	
 }

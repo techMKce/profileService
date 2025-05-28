@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
 
+@Data
 @Entity 
 @Table(name="Student")
 public class StudentEntity {
@@ -38,6 +40,8 @@ public class StudentEntity {
 	private String institutionName;
 	private String degree;
 	private String program;
+	private String year;
+	private int semester;
 	private String startYear;
 	private String gradutaionYear;
 	private String cgpa;
