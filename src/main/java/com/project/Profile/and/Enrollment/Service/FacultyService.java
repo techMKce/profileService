@@ -87,7 +87,7 @@ public class FacultyService {
         List<LoginFacultyDto> faculty = response.getBody();
 
         for (LoginFacultyDto student : faculty) {
-            System.out.println("Roll: " + student.getId() + ", Email: " + student.getEmail());
+            System.out.println(student.toString());
         }
 
         for (LoginFacultyDto dto : faculty) {
@@ -95,7 +95,7 @@ public class FacultyService {
             student.setStaffId(dto.getId());
             student.setName(dto.getName());
             student.setEmail(dto.getEmail());
-            student.setDepartment(dto.getDept()); // Assuming department is equivalent to progra
+            student.setDepartment(dto.getDepartment()); // Assuming department is equivalent to progra
 
             facultyRepository.save(student);
         }

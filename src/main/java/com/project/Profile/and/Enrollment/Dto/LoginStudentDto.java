@@ -7,6 +7,6 @@ public class LoginStudentDto {
     private String id;
     private String email;
     private String name;
-    private String dept;
+    private String department;
     private String year;
 }

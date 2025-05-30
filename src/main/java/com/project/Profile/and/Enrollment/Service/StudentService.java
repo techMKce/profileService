@@ -106,7 +106,7 @@ public class StudentService {
 			student.setRollNum(dto.getId());
 			student.setName(dto.getName());
 			student.setEmail(dto.getEmail());
-			student.setProgram(dto.getDept()); // Assuming department is equivalent to program
+			student.setProgram(dto.getDepartment()); // Assuming department is equivalent to program
 			student.setYear(dto.getYear());
 
 			studentRepository.save(student);
