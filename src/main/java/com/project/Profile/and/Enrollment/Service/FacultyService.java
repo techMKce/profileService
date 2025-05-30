@@ -87,7 +87,7 @@ public class FacultyService {
         List<LoginFacultyDto> faculty = response.getBody();
 
         for (LoginFacultyDto student : faculty) {
-            System.out.println("Roll: " + student.getId() + ", Email: " + student.getEmail());
+            System.out.println(student.toString());
         }
 
         for (LoginFacultyDto dto : faculty) {
