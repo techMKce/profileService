@@ -95,7 +95,7 @@ public class FacultyService {
             student.setStaffId(dto.getId());
             student.setName(dto.getName());
             student.setEmail(dto.getEmail());
-            student.setDepartment(dto.getDepartment()); // Assuming department is equivalent to progra
+            student.setDepartment(dto.getDepartment());
 
             facultyRepository.save(student);
         }
