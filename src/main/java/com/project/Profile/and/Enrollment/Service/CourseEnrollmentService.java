@@ -124,7 +124,7 @@ public class CourseEnrollmentService {
 			StudentEntity student = studentRepository.findByRollNum(roll)
 					.orElseThrow(() -> new ResourceNotFoundException("Student not found with roll number: " + roll));
 
-			studentDetails.add(new StudentCourseInfoDto(roll, student.getProgram(),student.getName()));
+			studentDetails.add(new StudentCourseInfoDto(roll, student.getProgram(),student.getName(),student.getSemester()));
 		}
 
 		return studentDetails;
@@ -140,7 +140,7 @@ public class CourseEnrollmentService {
 					.orElseThrow(() -> new ResourceNotFoundException("Student not found with roll number: " + roll));
 
 			if (department.equalsIgnoreCase(student.getProgram())) {
-				filteredStudents.add(new StudentCourseInfoDto(roll, student.getProgram(), student.getName()));
+				filteredStudents.add(new StudentCourseInfoDto(roll, student.getProgram(), student.getName(),student.getSemester()));
 			}
 		}
 
