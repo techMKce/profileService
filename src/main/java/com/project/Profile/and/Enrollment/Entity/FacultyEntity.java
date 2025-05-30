@@ -188,8 +188,5 @@ public class FacultyEntity {
 	public FacultyEntity() {
 		super();
 	}
-	
-	
-	
-	
+
 }
