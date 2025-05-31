@@ -21,12 +21,25 @@ public class AdminService {
     @Autowired
     private FacultyRepository facultyRepository;
 
+    @Autowired
+    private StudentService studentService;
+
+    @Autowired
+    private FacultyService facultyService;
+
     public StudentEntity getStudentByRollNum(String rollNum) {
+        try{
+            studentService.syncStudentsFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing student from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing student data. Please try again later.");
+        }
         return studentRepository.findByRollNum(rollNum)
         		.orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + rollNum));
     }
 
     public StudentEntity updateStudent(String rollNum, StudentEntity student) {
+
         StudentEntity updstudent = studentRepository.findByRollNum(rollNum)
         		.orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + rollNum));
 
@@ -64,10 +77,22 @@ public class AdminService {
     }
 
     public List<StudentEntity> getAllStudent() {
+        try{
+            studentService.syncStudentsFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing student from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing student data. Please try again later.");
+        }
         return studentRepository.findAll();
     }
     
     public StudentEntity deleteStudent(String rollnum) {
+        try{
+            studentService.syncStudentsFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing student from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing student data. Please try again later.");
+        }
     	Optional<StudentEntity> studentOpt = studentRepository.findById(rollnum);
         if (studentOpt.isPresent()) {
             StudentEntity student = studentOpt.get();
@@ -80,6 +105,12 @@ public class AdminService {
     
     
     public FacultyEntity getFacultyByStaffId(String staffId) {
+        try{
+            facultyService.syncFacultyFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing faculty from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing faculty data. Please try again later.");
+        }
         return facultyRepository.findByStaffId(staffId)
         		.orElseThrow(() -> new ResourceNotFoundException("Faculty not found with ID: " + staffId));
     }
@@ -110,10 +141,22 @@ public class AdminService {
     }
     
     public List<FacultyEntity> getAllFaculty() {
-        return facultyRepository.findAll(); 
+        try{
+            facultyService.syncFacultyFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing faculty from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing faculty data. Please try again later.");
+        }
+        return facultyRepository.findAll();
     }
     
     public FacultyEntity deleteFaculty(String staffId) {
+        try{
+            facultyService.syncFacultyFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing faculty from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing faculty data. Please try again later.");
+        }
     	Optional<FacultyEntity> facultyOpt = facultyRepository.findById(staffId);
         if (facultyOpt.isPresent()) {
             FacultyEntity faculty = facultyOpt.get();
