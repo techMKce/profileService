@@ -24,15 +24,34 @@ public class FacultyService {
     private FacultyRepository facultyRepository;
 
     public FacultyEntity createFaculty(FacultyEntity faculty) {
+        try{
+            syncFacultyFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing faculty from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing faculty data. Please try again later.");
+        }
         return facultyRepository.save(faculty);
     }
 
     public FacultyEntity getFacultyByStaffId(String staffId) {
+        try{
+            syncFacultyFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing faculty from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing faculty data. Please try again later.");
+        }
+
         return facultyRepository.findByStaffId(staffId)
         		.orElseThrow(() -> new ResourceNotFoundException("Faculty not found with ID: " + staffId));
     }
 
     public FacultyEntity updateFaculty(String staffId, FacultyEntity faculty) {
+        try{
+            syncFacultyFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing faculty from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing faculty data. Please try again later.");
+        }
     	FacultyEntity updfaculty = facultyRepository.findByStaffId(staffId)
                 .orElseThrow(() -> new ResourceNotFoundException("Faculty not found with ID: " + staffId));
 
@@ -57,9 +76,21 @@ public class FacultyService {
         return facultyRepository.save(updfaculty);
     }
     public List<FacultyEntity> getAllFaculty() {
+        try{
+            syncFacultyFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing faculty from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing faculty data. Please try again later.");
+        }
         return facultyRepository.findAll(); 
     }
     public List<FacultyDto> getFacultyNamesByDepartment(String department) {
+        try{
+            syncFacultyFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing faculty from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing faculty data. Please try again later.");
+        }
         List<FacultyEntity> facultyList = facultyRepository.findByDepartmentIgnoreCase(department);
 
         if (facultyList.isEmpty()) {
@@ -91,7 +122,7 @@ public class FacultyService {
         }
 
         for (LoginFacultyDto dto : faculty) {
-            FacultyEntity student = new FacultyEntity();
+            FacultyEntity student = facultyRepository.findByStaffId(dto.getId()).orElse(new FacultyEntity());
             student.setStaffId(dto.getId());
             student.setName(dto.getName());
             student.setEmail(dto.getEmail());
@@ -102,6 +133,12 @@ public class FacultyService {
     }
 
     public List<String> getAllDepartments() {
+        try{
+            syncFacultyFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing faculty from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing faculty data. Please try again later.");
+        }
         return facultyRepository.findDistinctDepartments();
     }
 

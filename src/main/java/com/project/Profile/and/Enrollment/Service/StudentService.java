@@ -25,15 +25,33 @@ public class StudentService {
 	private StudentRepository studentRepository;
 
 	public StudentEntity createStudent(StudentEntity student) {
+		try{
+			syncStudentsFromLoginService();
+		}catch (Exception e){
+			System.out.println("Error syncing student from login service: " + e.getMessage());
+			throw  new ResourceNotFoundException("Error syncing student data. Please try again later.");
+		}
 		return studentRepository.save(student);
 	}
 
 	public StudentEntity getStudentByRollNum(String rollNum) {
+		try{
+			syncStudentsFromLoginService();
+		}catch (Exception e){
+			System.out.println("Error syncing student from login service: " + e.getMessage());
+			throw  new ResourceNotFoundException("Error syncing student data. Please try again later.");
+		}
 		return studentRepository.findByRollNum(rollNum)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + rollNum));
 	}
 
 	public StudentEntity updateStudent(String rollNum, StudentEntity student) {
+		try{
+			syncStudentsFromLoginService();
+		}catch (Exception e){
+			System.out.println("Error syncing student from login service: " + e.getMessage());
+			throw  new ResourceNotFoundException("Error syncing student data. Please try again later.");
+		}
 		StudentEntity updstudent = studentRepository.findByRollNum(rollNum)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + rollNum));
 
@@ -72,6 +90,12 @@ public class StudentService {
 		return studentRepository.save(updstudent);
 	}
 	public List<StudentEntity> getAllStudent() {
+		try{
+			syncStudentsFromLoginService();
+		}catch (Exception e){
+			System.out.println("Error syncing student from login service: " + e.getMessage());
+			throw  new ResourceNotFoundException("Error syncing student data. Please try again later.");
+		}
 		return studentRepository.findAll();
 	}
 
@@ -102,11 +126,11 @@ public class StudentService {
 		}
 
 		for (LoginStudentDto dto : students) {
-			StudentEntity student = new StudentEntity();
+			StudentEntity student = studentRepository.findByRollNum(dto.getId()).orElse(new StudentEntity());
 			student.setRollNum(dto.getId());
 			student.setName(dto.getName());
 			student.setEmail(dto.getEmail());
-			student.setProgram(dto.getDepartment()); // Assuming department is equivalent to program
+			student.setProgram(dto.getDepartment());
 			student.setYear(dto.getYear());
 
 			studentRepository.save(student);
