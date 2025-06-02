@@ -3,6 +3,7 @@ package com.project.Profile.and.Enrollment.Controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.project.Profile.and.Enrollment.Dto.FacultyDto;
@@ -50,6 +51,11 @@ public class FacultyController {
 	@GetMapping("/departments")
 	public List<String> getDepartments() {
 		return facultyService.getAllDepartments();
+	}
+
+	@GetMapping("/count")
+	public ResponseEntity<Long> studentCount(){
+		return ResponseEntity.ok(facultyService.getCount());
 	}
 
 }

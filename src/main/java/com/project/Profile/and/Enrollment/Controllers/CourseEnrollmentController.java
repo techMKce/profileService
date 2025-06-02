@@ -51,18 +51,11 @@ public class CourseEnrollmentController {
 
 	
 	@GetMapping("/check/{courseId}/{rollNum}")
-	public ResponseEntity<String> isStudentEnrolled(
+	public ResponseEntity<Boolean> isStudentEnrolled(
 	        @PathVariable String courseId,
 	        @PathVariable String rollNum) {
 
-	    boolean enrolled = service.isStudentEnrolledInCourse(courseId, rollNum);
-
-	    if (enrolled) {
-	        return ResponseEntity.ok("Student " + rollNum + " is enrolled in course " + courseId);
-	    } else {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	                .body("Student " + rollNum + " is NOT enrolled in course " + courseId);
-	    }
+	    return ResponseEntity.ok(service.isStudentEnrolledInCourse(courseId, rollNum));
 	}
 
 	@GetMapping("/student-details/{courseId}")

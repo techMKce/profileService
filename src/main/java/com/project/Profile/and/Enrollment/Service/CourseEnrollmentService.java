@@ -80,9 +80,16 @@ public class CourseEnrollmentService {
 	    }
 	    
 	    public boolean isStudentEnrolledInCourse(String courseId, String rollNum) {
-	        CourseEnrollment course = repository.findById(courseId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
-
+	        boolean status = repository.existsById(courseId);
+			CourseEnrollment course;
+			if(!status){
+				course = new CourseEnrollment();
+				course.setCourseId(courseId);
+				course.setRollNums(new ArrayList<>());
+				repository.save(course);
+				return false;
+			}
+			course = repository.findById(courseId).orElseThrow(() -> new ResourceNotFoundException("Student not found with roll number: " + rollNum));
 	        return course.getRollNums().contains(rollNum);
 	    }
 	    //get total enrollement count 

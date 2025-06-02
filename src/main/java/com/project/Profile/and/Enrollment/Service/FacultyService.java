@@ -3,8 +3,6 @@ package com.project.Profile.and.Enrollment.Service;
 import java.util.List;
 
 import com.project.Profile.and.Enrollment.Dto.LoginFacultyDto;
-import com.project.Profile.and.Enrollment.Dto.LoginStudentDto;
-import com.project.Profile.and.Enrollment.Entity.StudentEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -117,18 +115,18 @@ public class FacultyService {
 
         List<LoginFacultyDto> faculty = response.getBody();
 
-        for (LoginFacultyDto student : faculty) {
-            System.out.println(student.toString());
+        for (LoginFacultyDto f : faculty) {
+            System.out.println(f.toString());
         }
 
         for (LoginFacultyDto dto : faculty) {
-            FacultyEntity student = facultyRepository.findByStaffId(dto.getId()).orElse(new FacultyEntity());
-            student.setStaffId(dto.getId());
-            student.setName(dto.getName());
-            student.setEmail(dto.getEmail());
-            student.setDepartment(dto.getDepartment());
+            FacultyEntity fac = facultyRepository.findByStaffId(dto.getId()).orElse(new FacultyEntity());
+            fac.setStaffId(dto.getId());
+            fac.setName(dto.getName());
+            fac.setEmail(dto.getEmail());
+            fac.setDepartment(dto.getDepartment());
 
-            facultyRepository.save(student);
+            facultyRepository.save(fac);
         }
     }
 
@@ -140,6 +138,16 @@ public class FacultyService {
             throw  new ResourceNotFoundException("Error syncing faculty data. Please try again later.");
         }
         return facultyRepository.findDistinctDepartments();
+    }
+
+    public Long getCount(){
+        try{
+            syncFacultyFromLoginService();
+        }catch (Exception e){
+            System.out.println("Error syncing faculty from login service: " + e.getMessage());
+            throw  new ResourceNotFoundException("Error syncing faculty data. Please try again later.");
+        }
+        return facultyRepository.count();
     }
 
 }
