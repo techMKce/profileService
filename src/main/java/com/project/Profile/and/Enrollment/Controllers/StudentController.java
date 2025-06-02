@@ -3,6 +3,7 @@ package com.project.Profile.and.Enrollment.Controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,6 +47,10 @@ public class StudentController {
         studentService.syncStudentsFromLoginService();
         return "Student data synced successfully!";
     }
-	
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> studentCount(){
+        return ResponseEntity.ok(studentService.getCount());
+    }
 	
 }

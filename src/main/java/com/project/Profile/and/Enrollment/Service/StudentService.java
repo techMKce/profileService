@@ -127,7 +127,7 @@ public class StudentService {
 
 		for (LoginStudentDto dto : students) {
 			StudentEntity student = studentRepository.findByRollNum(dto.getId()).orElse(new StudentEntity());
-			student.setRollNum(dto.getId());
+			student.setRollNum(dto.getId()) ;
 			student.setName(dto.getName());
 			student.setEmail(dto.getEmail());
 			student.setProgram(dto.getDepartment());
@@ -135,6 +135,17 @@ public class StudentService {
 
 			studentRepository.save(student);
 		}
+	}
+
+
+	public Long getCount(){
+		try{
+			syncStudentsFromLoginService();
+		}catch (Exception e){
+			System.out.println("Error syncing student from login service: " + e.getMessage());
+			throw  new ResourceNotFoundException("Error syncing student data. Please try again later.");
+		}
+		return studentRepository.count();
 	}
 
 
