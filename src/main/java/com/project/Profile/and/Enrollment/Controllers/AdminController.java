@@ -50,7 +50,7 @@ public class AdminController {
         return adminService.updateStudent(rollnum, student);
     }
     
-    @DeleteMapping("/student/{rollnum}")
+    @DeleteMapping("/student/delete/{rollnum}")
     public StudentEntity deleteStudentDetails(@PathVariable String rollnum) {
         return adminService.deleteStudent(rollnum);
     }
@@ -71,7 +71,7 @@ public class AdminController {
 		return adminService.updateFaculty(staffId, faculty);
 	}
 	
-	 @DeleteMapping("/faculty/{staffId}")
+	 @DeleteMapping("/faculty/delete/{staffId}")
 	    public FacultyEntity deleteFacultyDetails(@PathVariable String staffId) {
 	        return adminService.deleteFaculty(staffId);
 	    }

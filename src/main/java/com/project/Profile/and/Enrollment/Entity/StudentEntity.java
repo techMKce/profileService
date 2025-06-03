@@ -2,6 +2,7 @@ package com.project.Profile.and.Enrollment.Entity;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -14,8 +15,10 @@ public class StudentEntity {
 
 	@Id
 	private String rollNum;
-	
+
+	@Column(name = "image", columnDefinition="TEXT")
 	private String image;
+
 	private String name;
 	private String email;
 	public enum gen{

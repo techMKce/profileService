@@ -51,10 +51,6 @@ public class FacultyStudentAssignmentService {
                 assignedToOtherFaculties.addAll(assignment.getAssignedRollNums());
             }
         }
-
-        
-      
-        
         for (String roll : rollNums) {
             if (assignedToOtherFaculties.contains(roll)) {
             	throw new InvalidRequestException("Roll number " + roll + " is already assigned to another faculty for this course");
@@ -66,18 +62,55 @@ public class FacultyStudentAssignmentService {
         FacultyStudentAssignment assignment = repository.findById(key)
             .orElse(new FacultyStudentAssignment(facultyId, courseId, new ArrayList<>()));
 
-        
+
+        List<String> alreadyAssigned = new ArrayList<>();
+        List<String> newlyAssigned = new ArrayList<>();
+
         for (String roll : rollNums) {
-            if (!assignment.getAssignedRollNums().contains(roll)) {
+            if (assignment.getAssignedRollNums().contains(roll)) {
+                alreadyAssigned.add(roll);
+            } else {
                 assignment.getAssignedRollNums().add(roll);
+                newlyAssigned.add(roll);
             }
         }
 
-        
-        return repository.save(assignment);
+        if (newlyAssigned.isEmpty()) {
+            throw new InvalidRequestException("All provided roll numbers are already assigned to you: " + alreadyAssigned);
+        }
+
+        repository.save(assignment);
+
+        if (!alreadyAssigned.isEmpty()) {
+            throw new InvalidRequestException("Some roll numbers were already assigned to you and skipped: " + alreadyAssigned);
+        }
+
+        return assignment;
     }
 
-    
+    public void removeStudentFromAllFaculties(String rollNum) {
+        List<FacultyStudentAssignment> allAssignments = repository.findAll();
+
+        boolean removed = false;
+
+        for (FacultyStudentAssignment assignment : allAssignments) {
+            List<String> assignedRolls = assignment.getAssignedRollNums();
+            if (assignedRolls.contains(rollNum)) {
+                assignedRolls.remove(rollNum);
+                removed = true;
+
+                if (assignedRolls.isEmpty()) {
+                    repository.delete(assignment);
+                } else {
+                    repository.save(assignment);
+                }
+            }
+        }
+
+        if (!removed) {
+            throw new ResourceNotFoundException("Roll number " + rollNum + " was not assigned to any faculty in any course.");
+        }
+    }
         
     public List<FacultyStudentAssignment> getAssignmentsByFaculty(String facultyId) {
     	List<FacultyStudentAssignment> assignments = repository.findByIdFacultyId(facultyId);
