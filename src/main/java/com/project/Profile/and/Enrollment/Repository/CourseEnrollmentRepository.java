@@ -1,6 +1,7 @@
 package com.project.Profile.and.Enrollment.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +13,5 @@ public interface CourseEnrollmentRepository extends JpaRepository<CourseEnrollme
 	
 	@Query("SELECT c FROM CourseEnrollment c WHERE :rollNum MEMBER OF c.rollNums")
     List<CourseEnrollment> findByRollNum(@Param("rollNum") String rollNum);
+
 }

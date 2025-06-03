@@ -3,6 +3,7 @@ package com.project.Profile.and.Enrollment.Service;
 import java.util.List;
 import java.util.Optional;
 
+import com.project.Profile.and.Enrollment.Repository.FacultyStudentAssignmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,12 @@ public class AdminService {
 
     @Autowired
     private FacultyService facultyService;
+
+    @Autowired
+    private CourseEnrollmentService courseEnrollmentService;
+
+    @Autowired
+    private FacultyStudentAssignmentService facultyStudentAssignmentService;
 
     public StudentEntity getStudentByRollNum(String rollNum) {
         try{
@@ -95,6 +102,9 @@ public class AdminService {
         }
     	Optional<StudentEntity> studentOpt = studentRepository.findById(rollnum);
         if (studentOpt.isPresent()) {
+
+            facultyStudentAssignmentService.removeStudentFromAllFaculties(rollnum); // You already implemented this
+            courseEnrollmentService.removeStudentFromAllEnrollments(rollnum); // You'll implement this
             StudentEntity student = studentOpt.get();
             studentRepository.deleteById(rollnum);
             return student;

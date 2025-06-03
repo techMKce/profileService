@@ -3,13 +3,8 @@ package com.project.Profile.and.Enrollment.Controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.project.Profile.and.Enrollment.Dto.FacultyStudentAssignmentDto;
 import com.project.Profile.and.Enrollment.Entity.FacultyStudentAssignment;
@@ -50,6 +45,11 @@ public class FacultyStudentAssignmentController {
         return service.countCoursesAssignedToFaculty(facultyId);
     }
 
+    @DeleteMapping("/unassign-all/{rollNum}")
+    public ResponseEntity<String> removeStudentFromAllFaculties(@PathVariable String rollNum) {
+        service.removeStudentFromAllFaculties(rollNum);
+        return ResponseEntity.ok("Student " + rollNum + " removed from all faculty assignments.");
+    }
+
     
 }
-

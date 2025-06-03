@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.project.Profile.and.Enrollment.Dto.StudentCourseInfoDto;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -121,6 +122,20 @@ public class CourseEnrollmentService {
 
 	        return count;
 	    }
+
+	public void removeStudentFromAllEnrollments(String rollNum) {
+		List<CourseEnrollment> allEnrollments = repository.findAll();
+
+		for (CourseEnrollment enrollment : allEnrollments) {
+			List<String> rollNums = enrollment.getRollNums();
+			if (rollNums.remove(rollNum)) {
+				repository.save(enrollment);
+			}
+		}
+	}
+
+
+
 
 	public List<StudentCourseInfoDto> getEnrolledStudentsWithDepartmentandName(String courseId) {
 		CourseEnrollment course = repository.findById(courseId)
