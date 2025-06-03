@@ -40,7 +40,7 @@ public class AdminController {
         return adminService.getAllStudent();
     }
 
-    @GetMapping("/student/delete/{rollnum}")
+    @GetMapping("/student/{rollnum}")
     public StudentEntity getStudentDetails(@PathVariable String rollnum) {
         return adminService.getStudentByRollNum(rollnum);
     }
