@@ -132,6 +132,7 @@ public class StudentService {
 			student.setEmail(dto.getEmail());
 			student.setProgram(dto.getDepartment());
 			student.setYear(dto.getYear());
+			student.setSemester(dto.getSemester());
 
 			studentRepository.save(student);
 		}
