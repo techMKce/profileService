@@ -134,9 +134,6 @@ public class CourseEnrollmentService {
 		}
 	}
 
-
-
-
 	public List<StudentCourseInfoDto> getEnrolledStudentsWithDepartmentandName(String courseId) {
 		CourseEnrollment course = repository.findById(courseId)
 				.orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
@@ -169,5 +166,18 @@ public class CourseEnrollmentService {
 		return filteredStudents;
 	}
 
+	public boolean deleteCourseAndEnrollments(String courseId) {
+		CourseEnrollment course = repository.findById(courseId)
+				.orElseThrow(() -> new ResourceNotFoundException("Course not found with ID: " + courseId));
 
+		// Optional: Notify students
+		for (String roll : course.getRollNums()) {
+			StudentEntity student = studentRepository.findByRollNum(roll)
+					.orElseThrow(() -> new ResourceNotFoundException("Student not found with roll number: " + roll));
+		}
+
+		// Delete the course enrollment
+		repository.delete(course);
+		return true;
+	}
 }
