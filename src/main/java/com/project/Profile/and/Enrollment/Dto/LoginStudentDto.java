@@ -9,4 +9,5 @@ public class LoginStudentDto {
     private String name;
     private String department;
     private String year;
+    private int semester;
 }
