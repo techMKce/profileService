@@ -62,9 +62,13 @@ public class CourseEnrollmentController {
 			@PathVariable String dept) {
 		return service.getEnrolledStudentsByCourseAndDept(courseId, dept);
 	}
-	
-	
-	 
+
+	@DeleteMapping("/delete-course/{courseId}")
+	public ResponseEntity<String> deleteCourse(@PathVariable String courseId) {
+		service.deleteCourseAndEnrollments(courseId);
+		return ResponseEntity.ok("Course and its enrollments deleted successfully.");
+	}
+
 	// total number of enrollment
 	
 	        @GetMapping("/total-enrolled-count")

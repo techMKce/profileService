@@ -91,13 +91,10 @@ public class FacultyStudentAssignmentService {
     public void removeStudentFromAllFaculties(String rollNum) {
         List<FacultyStudentAssignment> allAssignments = repository.findAll();
 
-        boolean removed = false;
-
         for (FacultyStudentAssignment assignment : allAssignments) {
             List<String> assignedRolls = assignment.getAssignedRollNums();
             if (assignedRolls.contains(rollNum)) {
                 assignedRolls.remove(rollNum);
-                removed = true;
 
                 if (assignedRolls.isEmpty()) {
                     repository.delete(assignment);
@@ -105,10 +102,6 @@ public class FacultyStudentAssignmentService {
                     repository.save(assignment);
                 }
             }
-        }
-
-        if (!removed) {
-            throw new ResourceNotFoundException("Roll number " + rollNum + " was not assigned to any faculty in any course.");
         }
     }
         
